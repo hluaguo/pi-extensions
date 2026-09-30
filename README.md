@@ -1,10 +1,10 @@
 # pi-extensions
 
-Custom extensions for [Pi](https://github.com/earendil-works/pi-coding-agent), kept in one repo so they can be symlinked into any project and synced across machines.
+A hub of custom extensions for [Pi](https://github.com/earendil-works/pi-coding-agent). Each extension is independent; install only the ones you want into any project, and sync the hub across machines with git.
 
 ## Extensions
 
-### arxiv.ts
+### arxiv
 
 One tool, `arxiv_search`. Queries the official arXiv API.
 
@@ -14,7 +14,7 @@ One tool, `arxiv_search`. Queries the official arXiv API.
 
 Returns date, id, title, authors, an abstract snippet, and the abs link for each entry.
 
-### obsidian.ts
+### obsidian
 
 Two read-only tools over an Obsidian vault.
 
@@ -43,23 +43,23 @@ The config file written looks like:
 
 ## Install
 
-Clone the repo somewhere stable, then link the extensions into a project. Pi loads project extensions from `.pi/extensions/`:
+Clone the hub somewhere stable:
 
 ```sh
-git clone <this repo> ~/project/pi-extensions
-cd /path/to/your/project
-mkdir -p .pi/extensions
-ln -s ~/project/pi-extensions/arxiv.ts .pi/extensions/arxiv.ts
-ln -s ~/project/pi-extensions/obsidian.ts .pi/extensions/obsidian.ts
+git clone https://github.com/hluaguo/pi-extensions.git ~/project/pi-extensions
+cd ~/project/pi-extensions
 ```
 
-`install.sh` does the linking for you:
+See what the hub holds, then install selectively into a project:
 
 ```sh
-./install.sh /path/to/your/project
+./install.sh --list
+./install.sh /path/to/your/project arxiv        # just arxiv
+./install.sh /path/to/your/project arxiv obsidian
+./install.sh /path/to/your/project --all        # everything
 ```
 
-Copying the files works too; you just lose the single source of truth.
+Each extension is symlinked from `extensions/<name>.ts` into the project's `.pi/extensions/`. Copying the files works too; you just lose the single source of truth.
 
 After installing, run `/reload` inside Pi. The first time a project loads extensions, Pi asks you to trust the project.
 
@@ -71,5 +71,9 @@ These tools never write files. When a note needs editing, the agent uses the def
 
 ```sh
 git pull
-./install.sh /path/to/another/project
+./install.sh /path/to/another/project arxiv
 ```
+
+## Adding an extension
+
+Drop a new `<name>.ts` into `extensions/`, following the existing files as a template (default-export factory that receives the Pi `ExtensionAPI`). It shows up in `./install.sh --list` immediately.
