@@ -21,6 +21,33 @@ Two read-only tools over an Obsidian vault.
 - `obsidian_list`: lists markdown notes under a folder or the whole vault, one relative path per line
 - `obsidian_search`: fuzzy keyword search over file names and contents (case-insensitive; multiple words must all match). Returns note paths and file names only
 
+### slide-condenser
+
+Turn a course's lecture PDFs and tutorial sheets into one purified, ADHD-friendly Typst revision
+deck, with optional [archify](https://github.com/tt-a1i/archify) diagrams. Four tools plus a
+`/condense` command.
+
+- `condense_scaffold` — create the repo layout (`slides/`, `diagrams/`, `lectures/`, `tutorials/`) and
+  write the Typst template to `slides/<course>-revision.typ`
+- `condense_extract` — extract text from PDFs (`pdftotext -layout`) and DOCX so the agent can read the
+  whole course, with page counts
+- `condense_verify` — compile the deck and prove no slide overflowed (pages must equal
+  `1 + #slide() + #divider()`)
+- `condense_diagram` — render an archify HTML diagram to a cropped PNG using headless Firefox (works
+  without Chrome), ready to embed with the template's `diagram(...)` helper
+
+`/condense <folder>` starts the workflow: purify the material, write the deck, add diagrams, verify,
+and commit to a private repo. The playbook bakes in the purification rules, the ADHD design contract
+(one idea per slide, a takeaway on every concept slide, single-row formulas, color per section), and
+the requirement to credit archify.
+
+Requirements: `typst`, `pdftotext`/`pdfinfo` (poppler), `firefox`, ImageMagick (`magick`). For the
+optional diagram step:
+
+```sh
+npx skills add tt-a1i/archify
+```
+
 ## Vault configuration
 
 The vault location is resolved in this order:
